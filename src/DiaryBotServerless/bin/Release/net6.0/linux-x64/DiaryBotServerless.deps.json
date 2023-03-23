@@ -9,6 +9,7 @@
     ".NETCoreApp,Version=v6.0/linux-x64": {
       "DiaryBotServerless/1.0.0": {
         "dependencies": {
+          "AWSSDK.S3": "3.7.103.34",
           "Amazon.Lambda.APIGatewayEvents": "2.5.0",
           "Amazon.Lambda.Core": "2.1.0",
           "Amazon.Lambda.Serialization.Json": "2.1.0",
@@ -57,6 +58,25 @@
           "lib/net6.0/Amazon.Lambda.Serialization.SystemTextJson.dll": {
             "assemblyVersion": "0.0.0.0",
             "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "AWSSDK.Core/3.7.106.4": {
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.106.4"
+          }
+        }
+      },
+      "AWSSDK.S3/3.7.103.34": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.106.4"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.S3.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.103.34"
           }
         }
       },
@@ -324,6 +344,20 @@
       "sha512": "sha512-qgFCDJp5lyUNqCq1z18U7fZ/+rmMyw6RJf9nKfnJrf79YupDj02klQAjxymEYN66NykWXyc68SGkow6fy53hfg==",
       "path": "amazon.lambda.serialization.systemtextjson/2.3.0",
       "hashPath": "amazon.lambda.serialization.systemtextjson.2.3.0.nupkg.sha512"
+    },
+    "AWSSDK.Core/3.7.106.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-U+U7j0k5NxXXjjD9yxsVN5MjRpYlTSMyaDjLqwJaaeoFhycdkJ81t3Baret6VBwIGMmYpjAerk79vLAhvwU5Wg==",
+      "path": "awssdk.core/3.7.106.4",
+      "hashPath": "awssdk.core.3.7.106.4.nupkg.sha512"
+    },
+    "AWSSDK.S3/3.7.103.34": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RU1njUEnvyQwTEWY1Lb/taRmLkthKPVPkTdC7JHb23QjpQi/6aqDrXxZON2g940kNLICV8SpBZJKwtdW8A+hIA==",
+      "path": "awssdk.s3/3.7.103.34",
+      "hashPath": "awssdk.s3.3.7.103.34.nupkg.sha512"
     },
     "FireSharp/2.0.4": {
       "type": "package",

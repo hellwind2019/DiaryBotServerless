@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "1mVRDfNRoMw6fdJOuJDhB6vhoi5ecw8vTV7nuPxqsMiqlYg/1o9YZBZdk66JWqimg2KCT/u+EJ4L51EQjIUuZA==",
+  "dgSpecHash": "Naoe8Az6CDFhD2Qafgr1Am8w55K9CGNTdFcnG3AX5SgTrrg+jJEi5coQUWzp4GRsya4MxoGpzISJR4jDnK8v3Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,8 @@
     "C:\\Users\\danil\\.nuget\\packages\\amazon.lambda.core\\2.1.0\\amazon.lambda.core.2.1.0.nupkg.sha512",
     "C:\\Users\\danil\\.nuget\\packages\\amazon.lambda.serialization.json\\2.1.0\\amazon.lambda.serialization.json.2.1.0.nupkg.sha512",
     "C:\\Users\\danil\\.nuget\\packages\\amazon.lambda.serialization.systemtextjson\\2.3.0\\amazon.lambda.serialization.systemtextjson.2.3.0.nupkg.sha512",
+    "C:\\Users\\danil\\.nuget\\packages\\awssdk.core\\3.7.106.4\\awssdk.core.3.7.106.4.nupkg.sha512",
+    "C:\\Users\\danil\\.nuget\\packages\\awssdk.s3\\3.7.103.34\\awssdk.s3.3.7.103.34.nupkg.sha512",
     "C:\\Users\\danil\\.nuget\\packages\\firesharp\\2.0.4\\firesharp.2.0.4.nupkg.sha512",
     "C:\\Users\\danil\\.nuget\\packages\\microsoft.bcl\\1.1.9\\microsoft.bcl.1.1.9.nupkg.sha512",
     "C:\\Users\\danil\\.nuget\\packages\\microsoft.bcl.async\\1.0.168\\microsoft.bcl.async.1.0.168.nupkg.sha512",
@@ -38,10 +40,8 @@
     "C:\\Users\\danil\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512",
     "C:\\Users\\danil\\.nuget\\packages\\telegram.bot\\19.0.0-preview.2\\telegram.bot.19.0.0-preview.2.nupkg.sha512",
     "C:\\Users\\danil\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.15\\microsoft.netcore.app.ref.6.0.15.nupkg.sha512",
-    "C:\\Users\\danil\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\6.0.15\\microsoft.netcore.app.runtime.linux-x64.6.0.15.nupkg.sha512",
     "C:\\Users\\danil\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.15\\microsoft.windowsdesktop.app.ref.6.0.15.nupkg.sha512",
     "C:\\Users\\danil\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.15\\microsoft.aspnetcore.app.ref.6.0.15.nupkg.sha512",
-    "C:\\Users\\danil\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\6.0.15\\microsoft.aspnetcore.app.runtime.linux-x64.6.0.15.nupkg.sha512",
     "C:\\Users\\danil\\.nuget\\packages\\microsoft.netcore.app.crossgen2.win-x64\\6.0.15\\microsoft.netcore.app.crossgen2.win-x64.6.0.15.nupkg.sha512"
   ],
   "logs": [

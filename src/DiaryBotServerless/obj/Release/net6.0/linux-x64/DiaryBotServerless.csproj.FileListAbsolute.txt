@@ -35,3 +35,5 @@ C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotS
 C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\linux-x64\Microsoft.Threading.Tasks.dll
 C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\linux-x64\System.Net.Http.Extensions.dll
 C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\linux-x64\System.Net.Http.Primitives.dll
+C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\linux-x64\AWSSDK.Core.dll
+C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\linux-x64\AWSSDK.S3.dll

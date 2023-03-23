@@ -1,4 +1,6 @@
 using Amazon.Lambda.Core;
+using Amazon.S3;
+using Amazon.S3.Model;
 using DiaryBotServerless;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -11,7 +13,7 @@ namespace SimpleApi;
 public class UpdateService
 {
     private readonly TelegramBotClient botClient;
-
+    public string BucketName = "diary-bot-bucket";
     public UpdateService()
     {
         // replace with your bot token
@@ -24,7 +26,7 @@ public class UpdateService
         if (update is null) return;
         if (!(update.Message is { } message)) return;
         LambdaLogger.Log("Received Message from " + message.Chat.Id);
-        var firebaseClient = Utils.GetFirebaseClient();
+        /*var firebaseClient = Utils.GetFirebaseClient();
         const string isStartedField = "isStarted";
         const string channelIdField = "channelID";
         const string isRegisteredField = "isRegistered";
@@ -150,7 +152,13 @@ public class UpdateService
             await Utils.SetUserField(message.Chat.Id, currentPostTextField, "");
             await botClient.SendTextMessageAsync(message.Chat.Id, "Окей, нет, так нет", replyMarkup: new ReplyKeyboardRemove());
         }
-    }
+    }*/
+        var awsAccessKeyId = "AKIATHMI7NGKATDASD76";
+        var awsSecretAccessKey = "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";
+        
+        var s3client = new AmazonS3Client(awsAccessKeyId, awsSecretAccessKey);
+        
+        
         switch (message.Type)
         {
             case MessageType.Text:
@@ -160,6 +168,18 @@ public class UpdateService
                     {
                         await botClient.SendTextMessageAsync(message.Chat.Id,
                             "Здарова кабан братан  " + message.Chat.FirstName);
+                        break;
+                    }
+                    case "bucket test":
+                    {
+                        var response = await s3client.GetObjectAsync(BucketName, "test_json.json");
+                        StreamReader stream;
+                        using (stream = new StreamReader(response.ResponseStream))
+                        {
+                            var text = stream.ReadToEndAsync().Result;
+                            await botClient.SendTextMessageAsync(message.Chat.Id, text);
+                        }
+                        await botClient.SendTextMessageAsync(message.Chat.Id, response.LastModified.ToString());
                         break;
                     }
                     default:
