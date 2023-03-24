@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj": {}
+    "C:\\Users\\Dania\\RiderProjects\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj": {}
   },
   "projects": {
-    "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj": {
+    "C:\\Users\\Dania\\RiderProjects\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj",
+        "projectUniqueName": "C:\\Users\\Dania\\RiderProjects\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj",
         "projectName": "DiaryBotServerless",
-        "projectPath": "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj",
-        "packagesPath": "C:\\Users\\danil\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\obj\\",
+        "projectPath": "C:\\Users\\Dania\\RiderProjects\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj",
+        "packagesPath": "C:\\Users\\Dania\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dania\\RiderProjects\\DiaryBotServerless\\src\\DiaryBotServerless\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\danil\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dania\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -88,11 +88,19 @@
               "version": "[6.0.15, 6.0.15]"
             },
             {
+              "name": "Microsoft.AspNetCore.App.Runtime.linux-x64",
+              "version": "[6.0.15, 6.0.15]"
+            },
+            {
               "name": "Microsoft.NETCore.App.Crossgen2.win-x64",
               "version": "[6.0.15, 6.0.15]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.15, 6.0.15]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.linux-x64",
               "version": "[6.0.15, 6.0.15]"
             },
             {
@@ -106,6 +114,11 @@
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
         }
       }
     }

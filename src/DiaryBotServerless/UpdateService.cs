@@ -1,24 +1,25 @@
 using Amazon.Lambda.Core;
 using Amazon.S3;
 using Amazon.S3.Model;
-using DiaryBotServerless;
+using Newtonsoft.Json.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
-using File = Telegram.Bot.Types.File;
 
-namespace SimpleApi;
+namespace DiaryBotServerless;
 
 public class UpdateService
 {
-    private readonly TelegramBotClient botClient;
+    private readonly TelegramBotClient _botClient;
+    private readonly S3BucketServise _s3BucketServise;
     public string BucketName = "diary-bot-bucket";
+
     public UpdateService()
     {
         // replace with your bot token
         string token = Environment.GetEnvironmentVariable("BOT_TOKEN")!;
-        botClient = new TelegramBotClient(token);
+        _botClient = new TelegramBotClient(token);
+        _s3BucketServise = new S3BucketServise();
     }
 
     public async Task EchoAsync(Update update)
@@ -153,12 +154,12 @@ public class UpdateService
             await botClient.SendTextMessageAsync(message.Chat.Id, "Окей, нет, так нет", replyMarkup: new ReplyKeyboardRemove());
         }
     }*/
-        var awsAccessKeyId = "AKIATHMI7NGKATDASD76";
-        var awsSecretAccessKey = "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";
-        
+        var awsAccessKeyId = Environment.GetEnvironmentVariable("ACCESS_KEY");
+        var awsSecretAccessKey = Environment.GetEnvironmentVariable("SECRET_KEY");
+
         var s3client = new AmazonS3Client(awsAccessKeyId, awsSecretAccessKey);
-        
-        
+
+
         switch (message.Type)
         {
             case MessageType.Text:
@@ -166,30 +167,39 @@ public class UpdateService
                 {
                     case "привет кабан":
                     {
-                        await botClient.SendTextMessageAsync(message.Chat.Id,
+                        await _botClient.SendTextMessageAsync(message.Chat.Id,
                             "Здарова кабан братан  " + message.Chat.FirstName);
                         break;
                     }
-                    case "bucket test":
+                    case "show bucket":
                     {
-                        var response = await s3client.GetObjectAsync(BucketName, "test_json.json");
-                        StreamReader stream;
-                        using (stream = new StreamReader(response.ResponseStream))
-                        {
-                            var text = stream.ReadToEndAsync().Result;
-                            await botClient.SendTextMessageAsync(message.Chat.Id, text);
-                        }
-                        await botClient.SendTextMessageAsync(message.Chat.Id, response.LastModified.ToString());
+                        var UsersData = await _s3BucketServise.GetUsersData();
+                        await _botClient.SendTextMessageAsync(message.Chat.Id, UsersData.ToString());
+                        break;
+                    }
+                    case "change" :
+                    {
+                        await _s3BucketServise.TestChangeField();
+                        await _botClient.SendTextMessageAsync(message.Chat.Id, "Changed!");
                         break;
                     }
                     default:
                     {
-                        await botClient.SendTextMessageAsync(message.Chat.Id, message.Text!);
+                        await _botClient.SendTextMessageAsync(message.Chat.Id, message.Text!);
                         break;
                     }
                 }
-
                 break;
         }
+    }
+
+    public static Stream GenerateStreamFromJObject(JObject s)
+    {
+        var stream = new MemoryStream();
+        var writer = new StreamWriter(stream);
+        writer.Write(s);
+        writer.Flush();
+        stream.Position = 0;
+        return stream;
     }
 }
