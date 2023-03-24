@@ -168,7 +168,7 @@ public class UpdateService
                     case "привет кабан":
                     {
                         await _botClient.SendTextMessageAsync(message.Chat.Id,
-                            "Здарова кабан братан  " + message.Chat.FirstName);
+                            "Здарова кабан братан    " + message.Chat.FirstName);
                         break;
                     }
                     case "show bucket":
