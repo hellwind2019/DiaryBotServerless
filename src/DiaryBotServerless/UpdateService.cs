@@ -1,25 +1,30 @@
+using Amazon.DynamoDBv2;
 using Amazon.Lambda.Core;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
+using JsonConverter = System.Text.Json.Serialization.JsonConverter;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace DiaryBotServerless;
 
 public class UpdateService
 {
     private readonly TelegramBotClient _botClient;
-    private readonly S3BucketServise _s3BucketServise;
+    private readonly DynamoDBService _dynamoDbService;
     public string BucketName = "diary-bot-bucket";
 
     public UpdateService()
     {
         // replace with your bot token
-        string token = Environment.GetEnvironmentVariable("BOT_TOKEN")!;
+        var token = Environment.GetEnvironmentVariable("BOT_TOKEN")!;
         _botClient = new TelegramBotClient(token);
-        _s3BucketServise = new S3BucketServise();
+        _dynamoDbService = new DynamoDBService();
     }
 
     public async Task EchoAsync(Update update)
@@ -157,39 +162,81 @@ public class UpdateService
         var awsAccessKeyId = Environment.GetEnvironmentVariable("ACCESS_KEY");
         var awsSecretAccessKey = Environment.GetEnvironmentVariable("SECRET_KEY");
 
-        var s3client = new AmazonS3Client(awsAccessKeyId, awsSecretAccessKey);
 
-
-        switch (message.Type)
+        try
         {
-            case MessageType.Text:
-                switch (message.Text.ToLower())
+            var isUserRegistered = await _dynamoDbService.IsUserRegistered(message.Chat.Id);
+            if (!isUserRegistered)
+            {
+                 if (message.Text == "/start")
+            {
+            
+                var userExist = await _dynamoDbService.IsUserExists(message.Chat.Id);
+                if (userExist)
                 {
-                    case "привет кабан":
-                    {
-                        await _botClient.SendTextMessageAsync(message.Chat.Id,
-                            "Здарова кабан братан    " + message.Chat.FirstName);
-                        break;
-                    }
-                    case "show bucket":
-                    {
-                        var UsersData = await _s3BucketServise.GetUsersData();
-                        await _botClient.SendTextMessageAsync(message.Chat.Id, UsersData.ToString());
-                        break;
-                    }
-                    case "change" :
-                    {
-                        await _s3BucketServise.TestChangeField();
-                        await _botClient.SendTextMessageAsync(message.Chat.Id, "Changed!");
-                        break;
-                    }
-                    default:
-                    {
-                        await _botClient.SendTextMessageAsync(message.Chat.Id, message.Text!);
-                        break;
-                    }
+                    var answer = "Здравствуй снова!";
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, answer);
                 }
-                break;
+                else
+                {
+                    await _dynamoDbService.AddUserAsync(message.Chat.Id);
+                    var answer = "Отправь ссылку на свой дневник в формате @my_diary";
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, answer);
+                }
+            
+            }
+            else if (message.Text.Contains("@"))
+            {
+                var channelName = message.Text;
+                var channelId = await Utils.GetChannelId(channelName);
+                var user = _dynamoDbService.GetUserByIdAsync(message.Chat.Id).Result;
+                user.ChannelId = channelId;
+                await _dynamoDbService.AddUserAsync(user);
+                ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]
+                {
+                    new KeyboardButton[] { "Готово✅" }
+                }) {
+                    ResizeKeyboard = true
+                };
+                var answer = "Отлично! Теперь добавь бота в канал, и дай ему роль администратора";
+                await _botClient.SendTextMessageAsync(message.Chat.Id, answer, replyMarkup: replyKeyboardMarkup);
+            }
+            else if (message.Text.Contains("Готово✅"))
+            {
+                var user = await _dynamoDbService.GetUserByIdAsync(message.Chat.Id);
+                ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]
+                {
+                    new KeyboardButton[] { "Вижу😀", "Не вижу ☹" }
+                }) {
+                    ResizeKeyboard = true
+                };
+                var answer = $"Теперь бот отправит тестовое смс в канал";
+                await _botClient.SendTextMessageAsync(message.Chat.Id, answer, replyMarkup: replyKeyboardMarkup);
+                var channelAnswer = "Тестовое сообщение от DiaryBot";
+                await _botClient.SendTextMessageAsync(user.ChannelId, channelAnswer);
+            }
+            else if (message.Text.Contains("Вижу😀"))
+            {
+                
+                var answer = "Красавчик, ты смог!";
+                await _botClient.SendTextMessageAsync(message.Chat.Id, answer, replyMarkup: new ReplyKeyboardRemove());
+            }
+            else if (message.Text.Contains("Не вижу ☹"))
+            {
+                var answer = "Не для лохов делалось";
+                await _botClient.SendTextMessageAsync(message.Chat.Id, answer, replyMarkup: new ReplyKeyboardRemove());
+            }
+            }
+            else
+            {
+                var answer = "Что делать то?";
+                await _botClient.SendTextMessageAsync(message.Chat.Id, answer);
+            }
+        }
+        catch (Exception e)
+        {
+            await _botClient.SendTextMessageAsync(message.Chat.Id, e.Message);
+            throw;
         }
     }
 

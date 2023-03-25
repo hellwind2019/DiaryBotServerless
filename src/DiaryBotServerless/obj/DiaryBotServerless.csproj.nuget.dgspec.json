@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dania\\RiderProjects\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj": {}
+    "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dania\\RiderProjects\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj": {
+    "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dania\\RiderProjects\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj",
+        "projectUniqueName": "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj",
         "projectName": "DiaryBotServerless",
-        "projectPath": "C:\\Users\\Dania\\RiderProjects\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj",
-        "packagesPath": "C:\\Users\\Dania\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dania\\RiderProjects\\DiaryBotServerless\\src\\DiaryBotServerless\\obj\\",
+        "projectPath": "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\DiaryBotServerless.csproj",
+        "packagesPath": "C:\\Users\\danil\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\danil\\RiderProjects\\DiaryBotServerless\\DiaryBotServerless\\src\\DiaryBotServerless\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Dania\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\danil\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -38,6 +38,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AWSSDK.DynamoDBv2": {
+              "target": "Package",
+              "version": "[3.7.102.11, )"
+            },
             "AWSSDK.S3": {
               "target": "Package",
               "version": "[3.7.103.34, )"
@@ -88,19 +92,11 @@
               "version": "[6.0.15, 6.0.15]"
             },
             {
-              "name": "Microsoft.AspNetCore.App.Runtime.linux-x64",
-              "version": "[6.0.15, 6.0.15]"
-            },
-            {
               "name": "Microsoft.NETCore.App.Crossgen2.win-x64",
               "version": "[6.0.15, 6.0.15]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.15, 6.0.15]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Runtime.linux-x64",
               "version": "[6.0.15, 6.0.15]"
             },
             {
@@ -114,11 +110,6 @@
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
-        }
-      },
-      "runtimes": {
-        "linux-x64": {
-          "#import": []
         }
       }
     }

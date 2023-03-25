@@ -10,8 +10,9 @@ namespace DiaryBotServerless;
 
 public class Utils
 {
-    public static async Task<long> GetChannelId(string botToken, string channelName)
+    public static async Task<long> GetChannelId(string channelName)
     {
+        var botToken = Environment.GetEnvironmentVariable("BOT_TOKEN");
         var channelid = -1L;
         using var httpClient = new HttpClient();
         var response =

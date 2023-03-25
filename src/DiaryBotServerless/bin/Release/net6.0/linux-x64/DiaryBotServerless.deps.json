@@ -9,6 +9,7 @@
     ".NETCoreApp,Version=v6.0/linux-x64": {
       "DiaryBotServerless/1.0.0": {
         "dependencies": {
+          "AWSSDK.DynamoDBv2": "3.7.102.11",
           "AWSSDK.S3": "3.7.103.34",
           "Amazon.Lambda.APIGatewayEvents": "2.5.0",
           "Amazon.Lambda.Core": "2.1.0",
@@ -66,6 +67,17 @@
           "lib/netcoreapp3.1/AWSSDK.Core.dll": {
             "assemblyVersion": "3.3.0.0",
             "fileVersion": "3.7.106.4"
+          }
+        }
+      },
+      "AWSSDK.DynamoDBv2/3.7.102.11": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.106.4"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.DynamoDBv2.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.102.11"
           }
         }
       },
@@ -351,6 +363,13 @@
       "sha512": "sha512-U+U7j0k5NxXXjjD9yxsVN5MjRpYlTSMyaDjLqwJaaeoFhycdkJ81t3Baret6VBwIGMmYpjAerk79vLAhvwU5Wg==",
       "path": "awssdk.core/3.7.106.4",
       "hashPath": "awssdk.core.3.7.106.4.nupkg.sha512"
+    },
+    "AWSSDK.DynamoDBv2/3.7.102.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kK6APUGWMW8WusljoFpn9coe0jYF15GsGxkNAYtJIsR1svU90a3hpi1iN/jgTv1nCvYvFKGKCknwTJ6AcVsP2w==",
+      "path": "awssdk.dynamodbv2/3.7.102.11",
+      "hashPath": "awssdk.dynamodbv2.3.7.102.11.nupkg.sha512"
     },
     "AWSSDK.S3/3.7.103.34": {
       "type": "package",
