@@ -22,7 +22,7 @@ public class User
     {
         Id = -1;
         ChannelId = -1;
-        IsPostedToday = IsPostingNow = false;
+        IsPostedToday = IsPostingNow = IsRegistered = false;
         PostCount = 0;
         CurrentPostText = "";
     }

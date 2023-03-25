@@ -15,7 +15,7 @@ public class DynamoDBService
     private readonly AmazonDynamoDBClient _dynamoDbClient;
     private const string BucketName = "diary-bot-bucket";
     private const string TableName = "UsersTable";
-    
+
 
     public DynamoDBService()
     {
@@ -24,7 +24,6 @@ public class DynamoDBService
 
         _s3Client = new AmazonS3Client(awsAccessKeyId, awsSecretAccessKey);
         _dynamoDbClient = new AmazonDynamoDBClient(awsAccessKeyId, awsSecretAccessKey);
-
     }
 
     public async Task<JObject> GetUsersData()
@@ -38,7 +37,7 @@ public class DynamoDBService
             return json;
         }
     }
-    
+
     public async Task UpdateBucket(JObject usersData)
     {
         // var mergeSettings = new JsonMergeSettings
@@ -48,7 +47,7 @@ public class DynamoDBService
         // var oldData = GetUsersData().Result;
         // oldData.Merge(usersData, mergeSettings);
         // var mergredData = oldData.SelectToken("user") as JArray;
-        
+
         var inputStream = GenerateStreamFromJObject(usersData);
         var putObjectRequest = new PutObjectRequest
         {
@@ -69,21 +68,21 @@ public class DynamoDBService
         return stream;
     }
 
-    public async Task AddUserAsync(long id)
+   
+
+    public async Task AddUserAsync(User user)
     {
-        User user = new User(id);
-        
         Dictionary<string, AttributeValue> userAttributes = new Dictionary<string, AttributeValue>
-        { 
-           
+        {
             ["Id"] = new() { N = user.Id.ToString() },
             ["ChannelId"] = new() { N = user.ChannelId.ToString() },
-            ["IsPostedToday"] = new() { BOOL = user.IsPostedToday},
+            ["IsPostedToday"] = new() { BOOL = user.IsPostedToday },
             ["IsPostingNow"] = new() { BOOL = user.IsPostingNow },
+            ["IsRegistered"] = new() { BOOL = user.IsRegistered },
             ["PostCount"] = new() { N = user.PostCount.ToString() },
             ["CurrentPostText"] = new() { S = user.CurrentPostText }
-            
         };
+      
         PutItemRequest request = new PutItemRequest
         {
             TableName = TableName,
@@ -92,26 +91,6 @@ public class DynamoDBService
         PutItemResponse response = await _dynamoDbClient.PutItemAsync(request);
     }
 
-    public async Task AddUserAsync(User user)
-    {
-        Dictionary<string, AttributeValue> userAttributes = new Dictionary<string, AttributeValue>
-        { 
-           
-            ["Id"] = new() { N = user.Id.ToString() },
-            ["ChannelId"] = new() { N = user.ChannelId.ToString() },
-            ["IsPostedToday"] = new() { BOOL = user.IsPostedToday},
-            ["IsPostingNow"] = new() { BOOL = user.IsPostingNow },
-            ["PostCount"] = new() { N = user.PostCount.ToString() },
-            ["CurrentPostText"] = new() { S = user.CurrentPostText }
-            
-        };
-        PutItemRequest request = new PutItemRequest
-        {
-            TableName = TableName,
-            Item = userAttributes
-        };
-        PutItemResponse response = await _dynamoDbClient.PutItemAsync(request);
-    }
     public async Task<User?> GetUserByIdAsync(long id)
     {
         QueryRequest request = new QueryRequest
@@ -125,9 +104,9 @@ public class DynamoDBService
         };
 
         QueryResponse response = await _dynamoDbClient.QueryAsync(request);
-        if (response.Items[0] != null)
+        if (response.Items.Count() != 0)
         {
-            User user = new User
+            User user = new User()
             {
                 Id = long.Parse(response.Items[0]["Id"].N),
                 ChannelId = long.Parse(response.Items[0]["ChannelId"].N),
@@ -139,7 +118,8 @@ public class DynamoDBService
             };
             return user;
         }
-        return null;
+
+        return new User();
     }
 
     public async Task<bool> IsUserExists(long id)
@@ -169,6 +149,7 @@ public class DynamoDBService
         {
             return false;
         }
+
         QueryRequest request = new QueryRequest
         {
             TableName = TableName,

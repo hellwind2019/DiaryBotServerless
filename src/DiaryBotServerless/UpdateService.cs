@@ -165,67 +165,100 @@ public class UpdateService
 
         try
         {
-            var isUserRegistered = await _dynamoDbService.IsUserRegistered(message.Chat.Id);
-            if (!isUserRegistered)
+            var currentUser = await _dynamoDbService.GetUserByIdAsync(update.Message.Chat.Id);
+            if (!currentUser.IsRegistered)
             {
-                 if (message.Text == "/start")
-            {
-            
-                var userExist = await _dynamoDbService.IsUserExists(message.Chat.Id);
-                if (userExist)
+                if (message.Text == "/start")
                 {
-                    var answer = "Здравствуй снова!";
-                    await _botClient.SendTextMessageAsync(message.Chat.Id, answer);
-                }
-                else
-                {
-                    await _dynamoDbService.AddUserAsync(message.Chat.Id);
+                    await _dynamoDbService.AddUserAsync(new User(message.Chat.Id));
                     var answer = "Отправь ссылку на свой дневник в формате @my_diary";
                     await _botClient.SendTextMessageAsync(message.Chat.Id, answer);
                 }
-            
-            }
-            else if (message.Text.Contains("@"))
-            {
-                var channelName = message.Text;
-                var channelId = await Utils.GetChannelId(channelName);
-                var user = _dynamoDbService.GetUserByIdAsync(message.Chat.Id).Result;
-                user.ChannelId = channelId;
-                await _dynamoDbService.AddUserAsync(user);
-                ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]
+                else if (message.Text.Contains("@"))
                 {
-                    new KeyboardButton[] { "Готово✅" }
-                }) {
-                    ResizeKeyboard = true
-                };
-                var answer = "Отлично! Теперь добавь бота в канал, и дай ему роль администратора";
-                await _botClient.SendTextMessageAsync(message.Chat.Id, answer, replyMarkup: replyKeyboardMarkup);
-            }
-            else if (message.Text.Contains("Готово✅"))
-            {
-                var user = await _dynamoDbService.GetUserByIdAsync(message.Chat.Id);
-                ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]
+                    var channelName = message.Text;
+                    var channelId = await Utils.GetChannelId(channelName);
+                    var user = await _dynamoDbService.GetUserByIdAsync(message.Chat.Id);
+                    user.ChannelId = channelId;
+                    await _dynamoDbService.AddUserAsync(user);
+                    ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]
+                    {
+                        new KeyboardButton[] { "Готово✅" }
+                    })
+                    {
+                        ResizeKeyboard = true
+                    };
+                    var answer = "Отлично! Теперь добавь бота в канал, и дай ему роль администратора";
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, answer, replyMarkup: replyKeyboardMarkup);
+                }
+                else if (message.Text.Contains("Готово✅"))
                 {
-                    new KeyboardButton[] { "Вижу😀", "Не вижу ☹" }
-                }) {
-                    ResizeKeyboard = true
-                };
-                var answer = $"Теперь бот отправит тестовое смс в канал";
-                await _botClient.SendTextMessageAsync(message.Chat.Id, answer, replyMarkup: replyKeyboardMarkup);
-                var channelAnswer = "Тестовое сообщение от DiaryBot";
-                await _botClient.SendTextMessageAsync(user.ChannelId, channelAnswer);
+                    var user = await _dynamoDbService.GetUserByIdAsync(message.Chat.Id);
+                    ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]
+                    {
+                        new KeyboardButton[] { "Вижу😀", "Не вижу ☹" }
+                    })
+                    {
+                        ResizeKeyboard = true
+                    };
+                    var answer = $"Теперь бот отправит тестовое смс в канал";
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, answer, replyMarkup: replyKeyboardMarkup);
+                    var channelAnswer = "Тестовое сообщение от DiaryBot";
+                    await _botClient.SendTextMessageAsync(user.ChannelId, channelAnswer);
+                }
+                else if (message.Text.Contains("Вижу😀"))
+                {
+                    var answer = "Красавчик, ты смог!";
+                    var user = await _dynamoDbService.GetUserByIdAsync(message.Chat.Id);
+                    user.IsRegistered = true;
+                    await _dynamoDbService.AddUserAsync(user);
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, answer,
+                        replyMarkup: new ReplyKeyboardRemove());
+                }
+                else if (message.Text.Contains("Не вижу ☹"))
+                {
+                    var answer = "Не для лохов делалось";
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, answer,
+                        replyMarkup: new ReplyKeyboardRemove());
+                }
             }
-            else if (message.Text.Contains("Вижу😀"))
+            else if (currentUser.IsRegistered)
             {
-                
-                var answer = "Красавчик, ты смог!";
-                await _botClient.SendTextMessageAsync(message.Chat.Id, answer, replyMarkup: new ReplyKeyboardRemove());
-            }
-            else if (message.Text.Contains("Не вижу ☹"))
-            {
-                var answer = "Не для лохов делалось";
-                await _botClient.SendTextMessageAsync(message.Chat.Id, answer, replyMarkup: new ReplyKeyboardRemove());
-            }
+                if (message.Text == "Запостить✅")
+                {
+                    await _botClient.SendTextMessageAsync(currentUser.ChannelId, currentUser.CurrentPostText);
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, "Пост уже на канале 😉",
+                        replyMarkup: new ReplyKeyboardRemove());
+                    currentUser.IsPostingNow = false;
+                    currentUser.CurrentPostText = "";
+                    await _dynamoDbService.AddUserAsync(currentUser);
+                }
+                else if (message.Text == "Редактировать✏️️")
+                {
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, "Напишите исправленый текст: ");
+                }
+                else if (currentUser.IsPostingNow)
+                {
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, "Так будет выглядеть пост :");
+                    currentUser.CurrentPostText = Utils.FormatPost(currentUser, message.Text);
+                    await _dynamoDbService.AddUserAsync(currentUser);
+                    ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]
+                    {
+                        new KeyboardButton[] { "Запостить✅", "Редактировать✏️️" }
+                    })
+                    {
+                        ResizeKeyboard = true
+                    };
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, currentUser.CurrentPostText,
+                        replyMarkup: replyKeyboardMarkup);
+                }
+
+                if (message.Text.Contains("/write_post"))
+                {
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, "Как прошел день?");
+                    currentUser.IsPostingNow = true;
+                    await _dynamoDbService.AddUserAsync(currentUser);
+                }
             }
             else
             {
@@ -235,18 +268,9 @@ public class UpdateService
         }
         catch (Exception e)
         {
-            await _botClient.SendTextMessageAsync(message.Chat.Id, e.Message);
+            await _botClient.SendTextMessageAsync(message.Chat.Id, e.ToString());
             throw;
         }
     }
-
-    public static Stream GenerateStreamFromJObject(JObject s)
-    {
-        var stream = new MemoryStream();
-        var writer = new StreamWriter(stream);
-        writer.Write(s);
-        writer.Flush();
-        stream.Position = 0;
-        return stream;
-    }
+    
 }
