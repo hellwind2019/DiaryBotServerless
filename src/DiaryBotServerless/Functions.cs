@@ -19,22 +19,18 @@ public class Functions
     public async Task<APIGatewayProxyResponse> Get(JObject request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
-        try
-        {
+        
             Update? update = JObject.Parse(request.GetValue("body").ToString()).ToObject<Update>();
             await UpdateService.EchoAsync(update);
-        }
-        catch (Exception e)
-        {
-            context.Logger.LogInformation(e.Message);
-        }
+        
+       
        
 
 
         var response = new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = "Okay Response",
+            Body = "OK",
             Headers = new Dictionary<string, string> { { "Content-Type", "text/plain" } }
         };
 

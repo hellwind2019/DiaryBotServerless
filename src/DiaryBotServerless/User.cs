@@ -9,20 +9,23 @@ public class User
     public long Id { get; set; }
     public long ChannelId { get; set; }
 
-    public bool IsPostedToday { get; set; }
+    //public bool IsPostedToday { get; set; }
 
-    public bool IsPostingNow { get; set; }
+    //public bool IsPostingNow { get; set; }
     
     public int PostCount { get; set;}
     
     public string CurrentPostText { get; set; }
     
-    public bool IsRegistered { get; set; }
+    //public bool IsRegistered { get; set; }
+    public States State { get; set; }
+    
+    
     public User()
     {
         Id = -1;
         ChannelId = -1;
-        IsPostedToday = IsPostingNow = IsRegistered = false;
+        State = States.WaitingForChannelName;
         PostCount = 0;
         CurrentPostText = "";
     }

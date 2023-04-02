@@ -6,6 +6,7 @@ C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotS
 C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\publish\Amazon.Lambda.Core.dll
 C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\publish\Amazon.Lambda.Serialization.Json.dll
 C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\publish\Amazon.Lambda.Serialization.SystemTextJson.dll
+C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\publish\Appccelerate.StateMachine.dll
 C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\publish\AWSSDK.Core.dll
 C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\publish\AWSSDK.DynamoDBv2.dll
 C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\publish\AWSSDK.S3.dll
