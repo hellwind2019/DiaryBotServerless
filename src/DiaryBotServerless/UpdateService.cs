@@ -26,7 +26,6 @@ public class UpdateService
         _botClient = new TelegramBotClient(token);
         _dynamoDbService = new DynamoDBService();
     }
-
     public async Task EchoAsync(Update update)
     {
         if (update is null) return;
@@ -161,8 +160,8 @@ public class UpdateService
     }*/
         var awsAccessKeyId = Environment.GetEnvironmentVariable("ACCESS_KEY");
         var awsSecretAccessKey = Environment.GetEnvironmentVariable("SECRET_KEY");
-
-
+        
+        
         try
         {
             var currentUser = await _dynamoDbService.GetUserByIdAsync(update.Message.Chat.Id);
@@ -220,6 +219,7 @@ public class UpdateService
                     var answer = "Не для лохов делалось";
                     await _botClient.SendTextMessageAsync(message.Chat.Id, answer,
                         replyMarkup: new ReplyKeyboardRemove());
+                    
                 }
             }
             else if (currentUser.IsRegistered)
@@ -259,6 +259,7 @@ public class UpdateService
                     currentUser.IsPostingNow = true;
                     await _dynamoDbService.AddUserAsync(currentUser);
                 }
+                
             }
             else
             {
