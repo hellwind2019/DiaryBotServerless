@@ -39,6 +39,7 @@ public class UpdateService
         try{
             switch (message.Text)
             {
+                //you
                 case "/start":
                     _botStateMachine.Start();
                     LambdaLogger.Log("Received Message /start");
