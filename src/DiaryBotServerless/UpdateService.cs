@@ -35,13 +35,12 @@ public class UpdateService
         var User = await _dynamoDbService.GetUserByIdAsync(update.Message.Chat.Id);
         LambdaLogger.Log("Update : \n\n" +update);
         _botStateMachine = new BotStateMachine(update, User, _botClient, _dynamoDbService);
-        
+
         try{
             switch (message.Text)
             {
-                //you
                 case "/start":
-                    _botStateMachine.Start();
+                    _botStateMachine.StartRegister();
                     LambdaLogger.Log("Received Message /start");
                     break;
                 case { } a when a.Contains('@'):

@@ -1,5 +1,6 @@
 ﻿using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
+using Appccelerate.StateMachine.Machine.Reports;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -23,14 +24,14 @@ public class BotStateMachine
         message = update.Message;
         _dynamoDbService = dynamoDbService;
         var builder = new StateMachineDefinitionBuilder<States, Events>();
-        builder
+        /*builder
             .In(States.Idle)
             .On(Events.Start)
-            .If<bool>(_ => true).Goto(States.MainMenu)
+            .If<bool>(arg => true).Goto(States.MainMenu).Execute(WaitForChannelName)
             .Otherwise().Goto(States.WaitingForChannelName);
 
         builder
-            .In(States.WaitingForChannelName).ExecuteOnEntry(WaitForChannelName)
+            .In(States.WaitingForChannelName)
             .On(Events.ChannelNameReceived)
             .Goto(States.WaitingForAddingBot).Execute(WaitForAddingBot);
         
@@ -45,18 +46,22 @@ public class BotStateMachine
             .On(Events.TestMessageError).Goto(States.WaitingForChannelName).Execute(SendTestMessageError);
 
         builder
-            .In(States.MainMenu).ExecuteOnEntry(ShowMainMenu);
+            .In(States.MainMenu).ExecuteOnEntry(ShowMainMenu);*/
+        builder
+            .In(States.Idle)
+            .On(Events.Start).Goto(States.WaitingForChannelName).Execute(WaitForChannelName);
 
         builder.WithInitialState(States.Idle);
         _stateMachine = builder.Build().CreateActiveStateMachine();
+        _stateMachine.Start();
     }
 
    
 
-    public void Start()
+    public async void StartRegister()
     {
         bool isRegistered = _user != null;
-        _stateMachine.Fire(Events.Start, isRegistered);
+        _stateMachine.Fire(Events.Start);
     }
     public void ChannelNameReceived()
     {
