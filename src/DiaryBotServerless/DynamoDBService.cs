@@ -13,7 +13,6 @@ public class DynamoDBService
 {
    
     private readonly AmazonDynamoDBClient _dynamoDbClient;
-    private const string BucketName = "diary-bot-bucket";
     private const string TableName = "UsersTable";
 
 

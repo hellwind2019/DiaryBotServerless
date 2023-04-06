@@ -27,38 +27,42 @@ public class UpdateService
         _botClient = new TelegramBotClient(token);
         _dynamoDbService = new DynamoDBService();
     }
+
     public async Task EchoAsync(Update update)
     {
-        
         var message = update.Message;
-        LambdaLogger.Log("Received Message from " + message.Chat.Id);
-        var User = await _dynamoDbService.GetUserByIdAsync(update.Message.Chat.Id);
-        LambdaLogger.Log("Update : \n\n" +update);
-        _botStateMachine = new BotStateMachine(update, User, _botClient, _dynamoDbService);
+        await _botClient.SendTextMessageAsync(message.Chat.Id, "Start");
 
-        try{
+
+        try
+        {
+            LambdaLogger.Log("Received Message from " + message.Chat.Id);
+            var User = await _dynamoDbService.GetUserByIdAsync(update.Message.Chat.Id);
+            LambdaLogger.Log("Update : \n\n" + update);
+            _botStateMachine = new BotStateMachine(update, User, _botClient, _dynamoDbService, User.State);
+            await _botClient.SendTextMessageAsync(message.Chat.Id, "Start");
+
             switch (message.Text)
             {
                 case "/start":
-                    _botStateMachine.StartRegister();
+                    await _botStateMachine.StartRegister();
                     LambdaLogger.Log("Received Message /start");
                     break;
                 case { } a when a.Contains('@'):
-                    _botStateMachine.ChannelNameReceived();
+                    await _botClient.SendTextMessageAsync(message.Chat.Id, "Name received");
+                    await _botStateMachine.ChannelNameReceived();
                     break;
                 case "Готово✅":
-                    _botStateMachine.BotAdded();
+                    await _botStateMachine.BotAdded();
                     break;
                 case "Вижу😀":
-                    _botStateMachine.TestMessageSeen();
+                    await _botStateMachine.TestMessageSeen();
                     break;
                 case "Не вижу ☹":
-                    _botStateMachine.TestMessageError();
+                    await _botStateMachine.TestMessageError();
                     break;
-
             }
         }
-        
         /*try
         {
             var currentUser = await _dynamoDbService.GetUserByIdAsync(update.Message.Chat.Id);
@@ -126,10 +130,9 @@ public class UpdateService
             }
         }*/
         catch (Exception e)
-        {
-            await _botClient.SendTextMessageAsync(message.Chat.Id, e.ToString());
+        { 
+            //await _botClient.SendTextMessageAsync(message.Chat.Id, e.StackTrace + "Втф " + e.Message);
             throw;
         }
     }
-    
 }

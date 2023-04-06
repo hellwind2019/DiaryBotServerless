@@ -1,5 +1,7 @@
 ﻿using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
+using Appccelerate.StateMachine.AsyncMachine;
+
 using Appccelerate.StateMachine.Machine.Reports;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -14,16 +16,31 @@ public class BotStateMachine
     private TelegramBotClient _botClient;
     private DynamoDBService _dynamoDbService;
     private Message message;
-    private readonly ActiveStateMachine<States, Events> _stateMachine;
+    private readonly AsyncPassiveStateMachine<States, Events> _stateMachine;
 
-    public BotStateMachine(Update update, User? user, TelegramBotClient botClient, DynamoDBService dynamoDbService)
+    public BotStateMachine(Update update, User? user, TelegramBotClient botClient, DynamoDBService dynamoDbService, States initialState)
     {
         _update = update;
         _user = user;
         _botClient = botClient;
         message = update.Message;
         _dynamoDbService = dynamoDbService;
-        var builder = new StateMachineDefinitionBuilder<States, Events>();
+        var builder = new Appccelerate.StateMachine.AsyncMachine.StateMachineDefinitionBuilder<States, Events>();
+        builder
+            .In(States.Idle)
+            .On(Events.Start).Goto(States.WaitingForChannelName);
+
+        builder
+            .In(States.WaitingForChannelName).ExecuteOnEntry(WaitForChannelName)
+            .On(Events.ChannelNameReceived).Goto(States.WaitingForAddingBot);
+        
+        builder.In(States.WaitingForAddingBot).ExecuteOnEntry(WaitForAddingBot)
+            .On(Events.BotAdded).Goto(States.SendingTestMessage);
+
+
+        builder.WithInitialState(initialState);
+        _stateMachine = builder.Build().CreatePassiveStateMachine();
+        _stateMachine.Start();
         /*builder
             .In(States.Idle)
             .On(Events.Start)
@@ -47,39 +64,34 @@ public class BotStateMachine
 
         builder
             .In(States.MainMenu).ExecuteOnEntry(ShowMainMenu);*/
-        builder
-            .In(States.Idle)
-            .On(Events.Start).Goto(States.WaitingForChannelName).Execute(WaitForChannelName);
 
-        builder.WithInitialState(States.Idle);
-        _stateMachine = builder.Build().CreateActiveStateMachine();
-        _stateMachine.Start();
     }
 
    
 
-    public async void StartRegister()
+    public async Task StartRegister()
     {
-        bool isRegistered = _user != null;
-        _stateMachine.Fire(Events.Start);
+        await _stateMachine.Fire(Events.Start);
+        await _botClient.SendTextMessageAsync(message.Chat.Id, "StartRegister");
     }
-    public void ChannelNameReceived()
+    public async Task ChannelNameReceived()
     {
-        _stateMachine.Fire(Events.ChannelNameReceived);
+        await _botClient.SendTextMessageAsync(message.Chat.Id, "ChannelNameReceived");
+        await _stateMachine.Fire(Events.ChannelNameReceived);
     }
-    public void BotAdded()
+    public async Task BotAdded()
     { 
-        _stateMachine.Fire(Events.BotAdded);
+       await _stateMachine.Fire(Events.BotAdded);
     }
     
-    public void TestMessageSeen()
+    public async Task TestMessageSeen()
     {
-        _stateMachine.Fire(Events.TestMessageSeen);
+       await _stateMachine.Fire(Events.TestMessageSeen);
     }
   
-    public void TestMessageError()
+    public async Task TestMessageError()
     {
-        _stateMachine.Fire(Events.TestMessageError);
+       await _stateMachine.Fire(Events.TestMessageError);
     }
    
     

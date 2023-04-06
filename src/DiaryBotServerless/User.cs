@@ -17,7 +17,7 @@ public class User
     
     public string CurrentPostText { get; set; }
     
-    //public bool IsRegistered { get; set; }
+    
     public States State { get; set; }
     
     

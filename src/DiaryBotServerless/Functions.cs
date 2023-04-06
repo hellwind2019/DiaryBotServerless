@@ -22,12 +22,8 @@ public class Functions
         
             Update? update = JObject.Parse(request.GetValue("body").ToString()).ToObject<Update>();
             await UpdateService.EchoAsync(update);
-        
-       
-       
 
-
-        var response = new APIGatewayProxyResponse
+            var response = new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
             Body = "OK",

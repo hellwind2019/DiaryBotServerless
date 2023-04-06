@@ -118,3 +118,4 @@ C:\Users\Dania\RiderProjects\DiaryBotServerless1\src\DiaryBotServerless\obj\Rele
 C:\Users\Dania\RiderProjects\DiaryBotServerless1\src\DiaryBotServerless\obj\Release\net6.0\linux-x64\DiaryBotServerless.genruntimeconfig.cache
 C:\Users\Dania\RiderProjects\DiaryBotServerless1\src\DiaryBotServerless\obj\Release\net6.0\linux-x64\ref\DiaryBotServerless.dll
 C:\Users\danil\RiderProjects\DiaryBotServerless\DiaryBotServerless\src\DiaryBotServerless\bin\Release\net6.0\linux-x64\Appccelerate.StateMachine.dll
+C:\Users\Dania\RiderProjects\DiaryBotServerless1\src\DiaryBotServerless\bin\Release\net6.0\linux-x64\Appccelerate.StateMachine.dll
